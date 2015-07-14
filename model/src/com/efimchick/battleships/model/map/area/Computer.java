@@ -8,6 +8,9 @@ import com.efimchick.battleships.model.map.Cell;
 import com.efimchick.battleships.model.map.CellType;
 import com.efimchick.battleships.model.map.Coordinates;
 import com.efimchick.battleships.model.map.Map;
+import com.efimchick.battleships.model.unit.Sailing;
+import com.efimchick.battleships.model.unit.Shooting;
+import com.efimchick.battleships.model.unit.Unit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +20,13 @@ import java.util.List;
  */
 public class Computer {
 
-    public static Area computeShootingArea(Map map, UnitType unitType, Position position) {
-        Coordinates coordinates = position.unitCoordinatesMap.get(unitType);
+    public static <T extends Unit & Shooting> Area computeShootingArea(Map map, T unit, Position position) {
+        Coordinates coordinates = position.unitCoordinatesMap.get(unit);
 
 
         List<Cell> cellList = new ArrayList<>();
         for (Direction direction : Direction.values()) {
-            for (int i = 1; i <= unitType.weapon.range; i++) {
+            for (int i = 1; i <= unit.getWeapon().range; i++) {
                 int x = coordinates.x + direction.x * i;
                 int y = coordinates.y + direction.y * i;
                 Cell cell = map.cellTable.get(x, y);
@@ -37,13 +40,13 @@ public class Computer {
         return new Area(cellList);
     }
 
-    public static Area computeMoveArea(Map map, Position position, Wind wind) {
-        Coordinates coordinates = position.unitCoordinatesMap.get(unitType);
+    public static <T extends Unit & Sailing> Area computeMoveArea(Map map, T unit, Position position, Wind wind) {
+        Coordinates coordinates = position.unitCoordinatesMap.get(unit);
         List<Cell> cellList = new ArrayList<>();
 
         if (wind.getPower() == WindPower.STORM) {
             Cell targetCell = null;
-            for (int i = 0; i <= unitType.engine.engineSpeeds.get(WindPower.STORM); i++) {
+            for (int i = 0; i <= unit.getEngine().engineSpeeds.get(WindPower.STORM); i++) {
                 int x = coordinates.x + wind.getDirection().x * i;
                 int y = coordinates.y + wind.getDirection().y * i;
                 Cell cell = map.cellTable.get(x, y);
@@ -57,7 +60,7 @@ public class Computer {
         } else {
             cellList.add(map.cellTable.get(coordinates.x, coordinates.y));
             for (Direction direction : Direction.values()) {
-                Integer directionSpeed = unitType.engine.engineSpeeds.get(wind.getPower()) - wind.getDirection().countDifference(direction);
+                Integer directionSpeed = unit.getEngine().engineSpeeds.get(wind.getPower()) - wind.getDirection().countDifference(direction);
                 for (int i = 1; i <= directionSpeed; i++) {
                     int x = coordinates.x + direction.x * i;
                     int y = coordinates.y + direction.y * i;

@@ -6,10 +6,12 @@ package com.efimchick.battleships.model.unit;
 public class FortressType implements Shooting, Building {
     public final Weapon weapon;
     public final WallStrength wallStrength;
+    public final String name;
 
-    public FortressType(Weapon weapon, WallStrength wallStrength) {
+    public FortressType(Weapon weapon, WallStrength wallStrength, String name) {
         this.weapon = weapon;
         this.wallStrength = wallStrength;
+        this.name = name;
     }
 
     @Override
@@ -20,5 +22,9 @@ public class FortressType implements Shooting, Building {
     @Override
     public WallStrength getWallStrength() {
         return wallStrength;
+    }
+
+    public String getName() {
+        return name;
     }
 }

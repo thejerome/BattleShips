@@ -8,11 +8,13 @@ public class ShipType implements Shooting, Sailing {
     public final Engine engine;
     public final Hull hull;
     public final Weapon weapon;
+    public final String name;
 
-    public ShipType(Engine engine, Hull hull, Weapon weapon) {
+    public ShipType(Engine engine, Hull hull, Weapon weapon, String name) {
         this.engine = engine;
         this.hull = hull;
         this.weapon = weapon;
+        this.name = name;
     }
 
     @Override
@@ -28,5 +30,9 @@ public class ShipType implements Shooting, Sailing {
     @Override
     public Weapon getWeapon() {
         return weapon;
+    }
+
+    public String getName() {
+        return name;
     }
 }

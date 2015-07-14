@@ -1,15 +1,22 @@
 package com.efimchick.battleships.model.unit;
 
-
 /**
- * Created by efimchick on 03.10.14.
+ * Created by efimchick on 14.07.15.
  */
-public class Unit {
-    public Weapon weapon;
-    public Engine engine;
+public abstract class Unit {
+    private final String name;
+    private final DamageModel damageModel;
 
-    public Unit(Weapon weapon, Engine engine) {
-        this.weapon = weapon;
-        this.engine = engine;
+    public Unit(String name) {
+        this.name = name;
+        this.damageModel = new DamageModel();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public DamageModel getDamageModel() {
+        return damageModel;
     }
 }

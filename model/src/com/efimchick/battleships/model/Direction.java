@@ -19,17 +19,26 @@ public enum Direction {
         this.y = y;
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
     public int countDifference(Direction another) {
-        int diff;
+        if (this.x == another.x && this.y == another.y) {
+            return 0;
+        }
+
+        if ((this.x == 0 && this.x == another.x && this.y == -another.y) ||
+                (this.y == 0 && this.y == another.y && this.x == -another.x)) {
+            return 4;
+        }
+
         int xDiff = Math.abs(this.x - another.x);
         int yDiff = Math.abs(this.y - another.y);
-
-        if (xDiff == 0 && x == 0) {
-            return 2 * yDiff;
-        } else if (yDiff == 0 && y == 0) {
-            return 4;
-        } else {
-            return xDiff + yDiff;
-        }
+        return xDiff + yDiff;
     }
 }

@@ -7,7 +7,6 @@ import com.efimchick.battleships.model.game.Position;
 import com.efimchick.battleships.model.map.area.Area;
 import com.efimchick.battleships.model.map.area.Computer;
 import com.efimchick.battleships.model.unit.Engine;
-import com.efimchick.battleships.model.unit.Unit;
 import com.efimchick.battleships.model.unit.Weapon;
 import com.google.common.collect.Table;
 import com.google.common.collect.TreeBasedTable;
@@ -30,13 +29,13 @@ public class Main {
             }
         }
         Map map = new Map(table);
-        Unit unit = new Unit(new Weapon(4, 5), new Engine());
-        unit.engine.engineSpeeds.put(WindPower.BREEZE, 5);
+        UnitType unitType = new UnitType(new Weapon(4, 5), new Engine());
+        unitType.engine.engineSpeeds.put(WindPower.BREEZE, 5);
         Position position = new Position();
-        position.unitCoordinatesMap.put(unit, new Coordinates(5, 1));
+        position.unitCoordinatesMap.put(unitType, new Coordinates(5, 1));
 
 
-        Area area = Computer.computeMoveArea(map, unit, position, new Wind(Direction.N, WindPower.BREEZE));
+        Area area = Computer.computeMoveArea(map, unitType, position, new Wind(Direction.N, WindPower.BREEZE));
         for (Cell cell : area.getCellList()) {
             cell.setCellType(CellType.PORT);
         }

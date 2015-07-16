@@ -11,4 +11,8 @@ public class Coordinates {
         this.x = x;
         this.y = y;
     }
+
+    public static Coordinates coords(int x, int y) {
+        return new Coordinates(x, y);
+    }
 }

@@ -10,7 +10,7 @@ public class ShipType implements Shooting, Sailing {
     public final Weapon weapon;
     public final String name;
 
-    public ShipType(Engine engine, Hull hull, Weapon weapon, String name) {
+    public ShipType(String name, Weapon weapon, Hull hull, Engine engine) {
         this.engine = engine;
         this.hull = hull;
         this.weapon = weapon;

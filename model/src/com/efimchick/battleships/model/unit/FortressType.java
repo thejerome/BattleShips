@@ -8,7 +8,7 @@ public class FortressType implements Shooting, Building {
     public final WallStrength wallStrength;
     public final String name;
 
-    public FortressType(Weapon weapon, WallStrength wallStrength, String name) {
+    public FortressType(String name, Weapon weapon, WallStrength wallStrength) {
         this.weapon = weapon;
         this.wallStrength = wallStrength;
         this.name = name;

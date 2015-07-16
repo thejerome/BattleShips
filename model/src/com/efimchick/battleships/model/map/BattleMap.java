@@ -1,20 +1,44 @@
 package com.efimchick.battleships.model.map;
 
+import com.efimchick.battleships.model.unit.Unit;
+import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-import com.google.common.collect.TreeBasedTable;
 
-import java.util.Arrays;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * Created by efimchick on 03.10.14.
  */
-public class Map {
+public class BattleMap {
 
-    public Table<Integer, Integer, Cell> cellTable = TreeBasedTable.create();
+    private Table<Integer, Integer, CellType> cellTable;
+    private java.util.Map<Unit, Coordinates> unitCoordinatesMap = new HashMap<>();
+    private List<PlayerSeat> playerSeats = new ArrayList<>();
+    private List<PlayerSeat> defensivePlayerSeats = Collections.unmodifiableList(playerSeats);
 
-    public Map(Table<Integer, Integer, Cell> cellTable) {
-        this.cellTable = cellTable;
+    public BattleMap(int width, int height) {
+        this.cellTable = HashBasedTable.create(width, height);
+    }
+
+    public CellType getCellAt(int x, int y) {
+        return cellTable.get(x, y);
+    }
+
+    public void setCellAt(int x, int y, CellType type) {
+        cellTable.put(x, y, type);
+    }
+
+    public void addPlayerSeat(PlayerSeat playerSeat) {
+        playerSeats.add(playerSeat);
+    }
+
+    public List<PlayerSeat> getPlayerSeats() {
+        return defensivePlayerSeats;
+    }
+
+    public Coordinates getCoordinatesOf(Unit unit) {
+        return unitCoordinatesMap.get(unit);
     }
 
     @Override
@@ -25,7 +49,7 @@ public class Map {
         for (Integer column : cellTable.columnKeySet()) {
             sb.append("\r\n");
             sb.append(procrust(cellSize, column.toString()));
-            sb.append(cellTable.column(column).values().stream().map(cell -> procrust(cellSize, cellTypeImage(cell.getCellType()))).collect(Collectors.joining()));
+            sb.append(cellTable.column(column).values().stream().map(cell -> procrust(cellSize, cellTypeImage(cell))).collect(Collectors.joining()));
         }
         return sb.toString();
     }

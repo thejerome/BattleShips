@@ -3,7 +3,7 @@ package com.efimchick.battleships.model.map;
 import com.efimchick.battleships.model.Direction;
 import com.efimchick.battleships.model.Wind;
 import com.efimchick.battleships.model.WindPower;
-import com.efimchick.battleships.model.game.Position;
+import com.efimchick.battleships.model.game.model.Position;
 import com.efimchick.battleships.model.map.area.Area;
 import com.efimchick.battleships.model.map.area.Computer;
 import com.efimchick.battleships.model.unit.*;
@@ -28,23 +28,21 @@ public class Main {
                 table.put(i, j, new Cell(CellType.LAND));
             }
         }
-        Map map = new Map(table);
+        BattleMap battleMap = new BattleMap(table);
         Ship ship = new Ship("Catalina",
                 new ShipType(
-                        new Engine(ImmutableMap.of(WindPower.BREEZE, 5, WindPower.CALM, 2, WindPower.STORM, 3)),
-                        new Hull(7),
-                        new Weapon(4, 5),
-                        "Frigate")
+                        "Frigate", new Weapon(4, 5), new Hull(7), new Engine(ImmutableMap.of(WindPower.BREEZE, 5, WindPower.CALM, 2, WindPower.STORM, 3))
+                )
         );
         Position position = new Position();
         position.unitCoordinatesMap.put(ship, new Coordinates(5, 1));
 
 
-        Area area = Computer.computeMoveArea(map, ship, position, new Wind(Direction.N, WindPower.BREEZE));
+        Area area = Computer.computeMoveArea(battleMap, ship, position, new Wind(Direction.N, WindPower.BREEZE));
         for (Cell cell : area.getCellList()) {
             cell.setCellType(CellType.PORT);
         }
 
-        System.out.println(map);
+        System.out.println(battleMap);
     }
 }

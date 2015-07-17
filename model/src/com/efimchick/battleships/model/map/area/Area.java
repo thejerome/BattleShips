@@ -1,6 +1,6 @@
 package com.efimchick.battleships.model.map.area;
 
-import com.efimchick.battleships.model.map.Cell;
+import com.efimchick.battleships.model.map.Coordinates;
 import com.google.common.collect.ImmutableList;
 
 import java.util.List;
@@ -9,13 +9,13 @@ import java.util.List;
  * Created by efimchick on 03.10.14.
  */
 public class Area {
-    private final List<Cell> cellList;
+    private final List<Coordinates> coordinatesList;
 
-    public Area(List<Cell> cellList) {
-        this.cellList = ImmutableList.copyOf(cellList);
+    public Area(List<Coordinates> coordinatesList) {
+        this.coordinatesList = ImmutableList.copyOf(coordinatesList);
     }
 
-    public List<Cell> getCellList() {
-        return cellList;
+    public List<Coordinates> getCoordinatesList() {
+        return coordinatesList;
     }
 }

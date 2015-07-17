@@ -8,12 +8,12 @@ import java.util.List;
 /**
  * Created by efimchick on 16.07.15.
  */
-public class PlayerSeat {
+public class Party {
     private final List<Coordinates> fortressSlots;
     private final Coordinates royalPort;
     private Player player;
 
-    public PlayerSeat(List<Coordinates> fortressSlots, Coordinates royalPort) {
+    public Party(List<Coordinates> fortressSlots, Coordinates royalPort) {
         this.fortressSlots = ImmutableList.copyOf(fortressSlots);
         this.royalPort = royalPort;
     }

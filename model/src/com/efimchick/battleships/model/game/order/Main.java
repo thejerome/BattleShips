@@ -2,7 +2,9 @@ package com.efimchick.battleships.model.game.order;
 
 import com.efimchick.battleships.model.game.model.Player;
 import com.efimchick.battleships.model.map.BattleMap;
-import com.efimchick.battleships.model.map.PlayerSeat;
+import com.efimchick.battleships.model.map.Coordinates;
+import com.efimchick.battleships.model.map.Party;
+import com.efimchick.battleships.model.map.area.Computer;
 import com.efimchick.battleships.model.unit.*;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -10,9 +12,9 @@ import com.google.common.collect.ImmutableMap;
 import java.util.List;
 
 import static com.efimchick.battleships.model.WindPower.*;
-import static com.efimchick.battleships.model.map.CellType.LAND;
-import static com.efimchick.battleships.model.map.CellType.SEA;
+import static com.efimchick.battleships.model.map.CellType.*;
 import static com.efimchick.battleships.model.map.Coordinates.coords;
+import static java.lang.Math.min;
 
 /**
  * Created by efimchick on 16.07.15.
@@ -42,31 +44,30 @@ public class Main {
         ShipType galley = new ShipType("Galley", smallBattery, mediumHull, normalSailsAndOars);
 
 
-        Player jerome = new Player(
-                "Jerome",
-                ImmutableList.of(
-                        new Fortress("Sevastopol", greatFort),
-                        new Fortress("Balaklava", fort),
-                        new Ship("Camilla1", dreadnaught),
-                        new Ship("Camilla2", clipper),
-                        new Ship("Camilla3", clipper),
-                        new Ship("Camilla4", galley),
-                        new Ship("Camilla5", galley)
-                )
+        ImmutableList<Unit> blackSeaFleet = ImmutableList.of(
+                new Fortress("Sevastopol", greatFort),
+                new Fortress("Balaklava", fort),
+                new Ship("Camilla1", dreadnaught),
+                new Ship("Camilla2", clipper),
+                new Ship("Camilla3", clipper),
+                new Ship("Camilla4", galley),
+                new Ship("Camilla5", galley)
         );
 
-        Player peterBlood = new Player(
-                "Peter Blood",
-                ImmutableList.of(
-                        new Fortress("Tortuga", greatFort),
-                        new Fortress("Barbados", fort),
-                        new Ship("Arabella1", dreadnaught),
-                        new Ship("Arabella2", clipper),
-                        new Ship("Arabella3", clipper),
-                        new Ship("Arabella4", galley),
-                        new Ship("Arabella5", galley)
-                )
+        Player jerome = new Player("Jerome");
+        jerome.setUnits(blackSeaFleet);
+
+        ImmutableList<Unit> carribeanFleet = ImmutableList.of(
+                new Fortress("Tortuga", greatFort),
+                new Fortress("Barbados", fort),
+                new Ship("Arabella1", dreadnaught),
+                new Ship("Arabella2", clipper),
+                new Ship("Arabella3", clipper),
+                new Ship("Arabella4", galley),
+                new Ship("Arabella5", galley)
         );
+        Player peterBlood = new Player("Peter Blood");
+        peterBlood.setUnits(carribeanFleet);
 
         int width = 30;
         int height = 30;
@@ -84,17 +85,44 @@ public class Main {
             }
         }
 
-        battleMap.addPlayerSeat(new PlayerSeat(
+        battleMap.addParty(new Party(
                 ImmutableList.of(coords(7, 8), coords(5, 4))
                 , coords(0, 0)
         ));
-        battleMap.addPlayerSeat(new PlayerSeat(
+        battleMap.addParty(new Party(
                 ImmutableList.of(coords(23, 24), coords(25, 24))
                 , coords(29, 29)
         ));
 
 
         List<Player> players = ImmutableList.of(jerome, peterBlood);
+
+        battleMap.getParties().get(0).setPlayer(jerome);
+        battleMap.getParties().get(1).setPlayer(peterBlood);
+
+
+        for (Party party : battleMap.getParties()) {
+            //forts and ports allocation
+            List<Coordinates> fortressSlots = party.getFortressSlots();
+            Player player = party.getPlayer();
+            List<Unit> forts = player.getForts();
+            for (int i = 0; i < min(fortressSlots.size(), forts.size()); i++) {
+                battleMap.setCoordinatesOf(forts.get(i), fortressSlots.get(i));
+                for (Coordinates coords : Computer.computeAdjacentSeaArea(battleMap, fortressSlots.get(i)).getCoordinatesList()) {
+                    battleMap.setCellAt(coords.x, coords.y, PORT);
+                    player.addPorts(coords);
+                }
+            }
+
+            for (int i = 0; i < min(player.getPorts().size(), player.getShips().size()); i++) {
+                battleMap.setCoordinatesOf(player.getShips().get(i), player.getPorts().get(i));
+            }
+        }
+
+
+
+
+
 
 
     }

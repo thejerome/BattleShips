@@ -1,10 +1,15 @@
 package com.efimchick.battleships.model.map;
 
 import com.efimchick.battleships.model.unit.Unit;
+import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Table;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -13,9 +18,9 @@ import java.util.stream.Collectors;
 public class BattleMap {
 
     private Table<Integer, Integer, CellType> cellTable;
-    private java.util.Map<Unit, Coordinates> unitCoordinatesMap = new HashMap<>();
-    private List<PlayerSeat> playerSeats = new ArrayList<>();
-    private List<PlayerSeat> defensivePlayerSeats = Collections.unmodifiableList(playerSeats);
+    private BiMap<Unit, Coordinates> unitCoordinatesMap = HashBiMap.create();
+    private List<Party> parties = new ArrayList<>();
+    private List<Party> defensiveParties = Collections.unmodifiableList(parties);
 
     public BattleMap(int width, int height) {
         this.cellTable = HashBasedTable.create(width, height);
@@ -29,16 +34,24 @@ public class BattleMap {
         cellTable.put(x, y, type);
     }
 
-    public void addPlayerSeat(PlayerSeat playerSeat) {
-        playerSeats.add(playerSeat);
+    public void addParty(Party party) {
+        parties.add(party);
     }
 
-    public List<PlayerSeat> getPlayerSeats() {
-        return defensivePlayerSeats;
+    public List<Party> getParties() {
+        return defensiveParties;
     }
 
-    public Coordinates getCoordinatesOf(Unit unit) {
+    public Coordinates getCoordsOf(Unit unit) {
         return unitCoordinatesMap.get(unit);
+    }
+
+    public Unit getUnitAt(Coordinates coordinates) {
+        return unitCoordinatesMap.inverse().get(coordinates);
+    }
+
+    public void setCoordinatesOf(Unit unit, Coordinates coords) {
+        unitCoordinatesMap.forcePut(unit, coords);
     }
 
     @Override

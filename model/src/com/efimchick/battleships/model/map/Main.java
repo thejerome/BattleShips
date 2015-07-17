@@ -39,7 +39,7 @@ public class Main {
 
 
         Area area = Computer.computeMoveArea(battleMap, ship, position, new Wind(Direction.N, WindPower.BREEZE));
-        for (Cell cell : area.getCellList()) {
+        for (Cell cell : area.getCoordinatesList()) {
             cell.setCellType(CellType.PORT);
         }
 
